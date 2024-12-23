@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Flex, Form, Input } from 'antd'
 import type { FormProps } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { Bike } from '../models/Bike'
 
 interface InputButtonProps {
   onButtonClick: (
+    id: number,
     model: string,
     type: string,
     color: string,
-    wheelSize: string,
+    wheelSize: number,
     price: number,
     description: string
   ) => boolean
+  initialValues?: Bike | null
 }
 
 type FieldType = {
@@ -23,10 +26,18 @@ type FieldType = {
   description?: string
 }
 
-const InputButton = ({ onButtonClick }: InputButtonProps) => {
+const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
   const [isLoading, setisLoading] = useState(false)
-
   const [form] = Form.useForm()
+
+  // This Function set the initial values of the form
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    } else {
+      form.resetFields()
+    }
+  }, [initialValues, form])
 
   const cleanField = () => {
     form.resetFields()
@@ -34,14 +45,14 @@ const InputButton = ({ onButtonClick }: InputButtonProps) => {
 
   // This Function make the form submit and add a bike to the list of bikes
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
     setisLoading(true)
 
     const result = onButtonClick(
+      initialValues?.id ?? 0,
       String(values.model),
       String(values.type),
       String(values.color),
-      String(values.wheelSize),
+      Number(values.wheelSize),
       Number(values.price),
       String(values.description)
     )
@@ -94,7 +105,7 @@ const InputButton = ({ onButtonClick }: InputButtonProps) => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isLoading}>
-            Add
+            {initialValues ? 'Update' : 'Add'}
           </Button>
         </Form.Item>
       </Form>
