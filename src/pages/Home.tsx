@@ -1,16 +1,19 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import InputButon from '../components/InputButon'
 import { Bike } from '../models/Bike'
 import BikeList from '../components/BikeList'
 import CardBike from '../components/CardBike'
 import DeleteModal from '../components/DeleteModal'
+import { useBikeContext } from '../context/BikeContext'
+import Contianer from '../components/Container'
 
 const Home = () => {
-  const [allBikes, setAllBikes] = useState<Bike[]>([])
+  const { bikes, setBikes } = useBikeContext()
   const [editingBike, setEditingBike] = useState<Bike | null>(null)
   const [bikeToDelete, setBikeToDelete] = useState<Bike | null>(null)
+  const navigate = useNavigate()
 
-  // This function make the form submit and add a bike to the list of bikes
   const addBikeOnList = (
     id: number | undefined,
     model: string,
@@ -20,40 +23,20 @@ const Home = () => {
     price: number,
     description: string
   ): boolean => {
-    // Check if the fields are empty
-    if (model == '') {
-      alert('Le modèle ne doit pas être vide')
+    if (
+      model == '' ||
+      type == '' ||
+      color == '' ||
+      wheelSize == 0 ||
+      price == 0 ||
+      description == ''
+    ) {
+      alert('Tous les champs doivent être remplis')
       return false
     }
 
-    if (type == '') {
-      alert('Le type ne doit pas être vide')
-      return false
-    }
-
-    if (color == '') {
-      alert('La couleur ne doit pas être vide')
-      return false
-    }
-
-    if (wheelSize == 0) {
-      alert('La taille de la roue ne doit pas être vide')
-      return false
-    }
-
-    if (price == 0) {
-      alert('Le prix ne doit pas être vide')
-      return false
-    }
-
-    if (description == '') {
-      alert('La description ne doit pas être vide')
-      return false
-    }
-
-    // Create a new bike
     const newBike: Bike = {
-      id: allBikes.length + 1,
+      id: bikes.length + 1,
       model,
       type,
       color,
@@ -63,12 +46,10 @@ const Home = () => {
       rents: [],
     }
 
-    // Add the new bike to the list of bikes
-    setAllBikes([...allBikes, newBike])
+    setBikes([...bikes, newBike])
     return true
   }
 
-  // This function delete a bike from the list of bikes
   const updateBikeOnList = (
     id: number,
     model: string,
@@ -78,8 +59,7 @@ const Home = () => {
     price: number,
     description: string
   ): boolean => {
-    // Check if the fields are empty
-    const updatedBikes = allBikes.map((bike) =>
+    const updatedBikes = bikes.map((bike) =>
       bike.id === id
         ? {
             ...bike,
@@ -92,39 +72,40 @@ const Home = () => {
           }
         : bike
     )
-    // Update the list of bikes
-    setAllBikes(updatedBikes)
+    setBikes(updatedBikes)
     setEditingBike(null)
     return true
   }
 
-  // This function delete a bike from the list of bikes
   const confirmDeleteBike = () => {
     if (bikeToDelete) {
-      const updatedBikes = allBikes.filter(
-        (bike) => bike.id !== bikeToDelete.id
-      )
-      setAllBikes(updatedBikes)
+      const updatedBikes = bikes.filter((bike) => bike.id !== bikeToDelete.id)
+      setBikes(updatedBikes)
       setBikeToDelete(null)
     }
   }
 
+  const viewBikeDetails = (bikeId: number) => {
+    navigate(`/bike/${bikeId}`)
+  }
+
   return (
-    <>
+    <Contianer>
+      <InputButon
+        onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
+        initialValues={editingBike}
+      />
       <BikeList
-        bikes={allBikes}
+        bikes={bikes}
         renderItem={(bike) => (
           <CardBike
             bike={bike}
             key={bike.id}
             onEdit={() => setEditingBike(bike)}
             onDelete={() => setBikeToDelete(bike)}
+            onViewDetails={() => viewBikeDetails(bike.id)}
           />
         )}
-      />
-      <InputButon
-        onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
-        initialValues={editingBike}
       />
       {bikeToDelete && (
         <DeleteModal
@@ -133,7 +114,7 @@ const Home = () => {
           onCancel={() => setBikeToDelete(null)}
         />
       )}
-    </>
+    </Contianer>
   )
 }
 

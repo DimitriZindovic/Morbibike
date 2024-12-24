@@ -17,7 +17,7 @@ const RightHeader = () => {
         <Avatar
           style={{
             color: '#fff',
-            backgroundColor: '#6c7cff',
+            backgroundColor: '#7ecdc3',
             cursor: 'pointer',
           }}
         >

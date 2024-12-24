@@ -10,7 +10,7 @@ interface BikeListProps {
 const BikeList = ({ renderItem, bikes }: BikeListProps) => {
   // Return a list of bikes
   return (
-    <Flex vertical gap={8}>
+    <Flex gap={8} style={{ width: '100%', height: '100%' }}>
       {bikes.map((bike) => renderItem(bike))}
     </Flex>
   )

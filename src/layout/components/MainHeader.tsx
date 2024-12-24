@@ -17,16 +17,20 @@ const MainHeader = () => {
           alignItems: 'center',
         }}
       >
-        <img
-          alt="Supplément Bacon"
-          src="/assets/logo.png"
-          style={{
-            float: 'left',
-            height: 46,
-            cursor: 'pointer',
-          }}
-          onClick={() => navigate('/')}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <img
+            alt="Morbibike"
+            src="/assets/logo.png"
+            style={{
+              float: 'left',
+              height: 46,
+              cursor: 'pointer',
+            }}
+            onClick={() => navigate('/')}
+          />
+
+          <h2>Morbibike</h2>
+        </div>
 
         <RightHeader />
       </div>

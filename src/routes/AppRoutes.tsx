@@ -1,21 +1,19 @@
-import App from '../App'
-import { FC } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-
-// Admin
 import GeneralLayout from '../layout/GeneralLayout'
 import Home from '../pages/Home'
+import BikeDetails from '../pages/BikeDetails'
+import { BikeProvider } from '../context/BikeContext'
 
-const AppRoutes: FC = () => (
-  <Routes>
-    <Route element={<App />}>
+const AppRoutes = () => (
+  <BikeProvider>
+    <Routes>
       <Route element={<GeneralLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/bike/:id" element={<BikeDetails />} />
       </Route>
-      {/* Fallback route */}
       <Route path="*" element={<Navigate to="/" />} />
-    </Route>
-  </Routes>
+    </Routes>
+  </BikeProvider>
 )
 
 export default AppRoutes

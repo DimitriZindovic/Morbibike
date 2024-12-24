@@ -15,7 +15,7 @@ export const FooterLayout: React.FC = () => {
           wrap
           style={{ justifyContent: 'center' }}
         ></Space>
-        <Text style={{ fontWeight: 300 }}>© {year} Supplément Bacon</Text>
+        <Text style={{ fontWeight: 300 }}>© {year} Dimitri Zindovic</Text>
       </Space>
     </Footer>
   )

@@ -65,41 +65,65 @@ const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
 
   // Return a form to add a bike
   return (
-    <Flex vertical style={{ width: '100%' }}>
-      <Form initialValues={{ remember: true }} onFinish={onFinish} form={form}>
+    <Flex vertical style={{ width: '30%' }}>
+      <Form
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        form={form}
+        layout="vertical"
+      >
         <Form.Item
+          label="Modèle du vélo"
+          layout="vertical"
           name={'model'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[{ required: true, message: 'Ajoutez un modèle de vélo' }]}
         >
           <Input placeholder="Enter the model of bike" type="text" />
         </Form.Item>
         <Form.Item
+          label="Type de vélo"
+          layout="vertical"
           name={'type'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[{ required: true, message: 'Ajoutez un type de vélo' }]}
         >
           <Input placeholder="Enter the type of bike" type="text" />
         </Form.Item>
         <Form.Item
+          label="Couleur"
+          layout="vertical"
           name={'color'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[{ required: true, message: 'Ajoutez une couleur au vélo' }]}
         >
           <Input placeholder="Enter the color of bike" type="text" />
         </Form.Item>
         <Form.Item
+          label="Taille de roue"
+          layout="vertical"
           name={'wheelSize'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[
+            {
+              required: true,
+              message: 'Ajoutez une taille de roue à votre vélo',
+            },
+          ]}
         >
           <Input placeholder="Enter the wheel size of bike" type="number" />
         </Form.Item>
         <Form.Item
+          label="Prix"
+          layout="vertical"
           name={'price'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[{ required: true, message: 'Ajoutez un prix à votre vélo' }]}
         >
           <Input placeholder="Enter the price of bike" type="number" />
         </Form.Item>
         <Form.Item
+          label="Description"
+          layout="vertical"
           name={'description'}
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[
+            { required: true, message: 'Ajoutez une description à votre vélo' },
+          ]}
         >
           <TextArea placeholder="Enter the description of bike" />
         </Form.Item>

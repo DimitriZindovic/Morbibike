@@ -1,13 +1,15 @@
 import { Button, Card, Flex } from 'antd'
+import { Link } from 'react-router-dom'
 import { Bike } from '../models/Bike'
 
 interface CardBikeProps {
   bike: Bike
   onEdit: () => void
   onDelete: () => void
+  onViewDetails: () => void
 }
 
-const CardBike = ({ bike, onEdit, onDelete }: CardBikeProps) => {
+const CardBike = ({ bike, onEdit, onDelete, onViewDetails }: CardBikeProps) => {
   // Return a card with the bike information
   return (
     <Card title={bike.model} key={bike.id} style={{ width: '100%' }}>
@@ -21,6 +23,11 @@ const CardBike = ({ bike, onEdit, onDelete }: CardBikeProps) => {
         <Button danger onClick={onDelete}>
           Delete
         </Button>
+        <Link to={`/bike/${bike.id}`}>
+          <Button type="primary" onClick={onViewDetails}>
+            View Details
+          </Button>
+        </Link>
       </Flex>
     </Card>
   )

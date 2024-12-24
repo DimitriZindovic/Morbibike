@@ -11,7 +11,7 @@ root.render(
     <App>
       <ConfigProvider
         theme={{
-          token: { colorPrimary: '#6c7cff' },
+          token: { colorPrimary: '#7ecdc3' },
         }}
       >
         <AppRoutes />
