@@ -7,6 +7,7 @@ import CardBike from '../components/CardBike'
 import DeleteModal from '../components/DeleteModal'
 import { useBikeContext } from '../context/BikeContext'
 import Contianer from '../components/Container'
+import { Flex } from 'antd'
 
 const Home = () => {
   const { bikes, setBikes } = useBikeContext()
@@ -91,29 +92,31 @@ const Home = () => {
 
   return (
     <Contianer>
-      <InputButon
-        onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
-        initialValues={editingBike}
-      />
-      <BikeList
-        bikes={bikes}
-        renderItem={(bike) => (
-          <CardBike
-            bike={bike}
-            key={bike.id}
-            onEdit={() => setEditingBike(bike)}
-            onDelete={() => setBikeToDelete(bike)}
-            onViewDetails={() => viewBikeDetails(bike.id)}
+      <Flex style={{ gap: '24px' }}>
+        <InputButon
+          onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
+          initialValues={editingBike}
+        />
+        <BikeList
+          bikes={bikes}
+          renderItem={(bike) => (
+            <CardBike
+              bike={bike}
+              key={bike.id}
+              onEdit={() => setEditingBike(bike)}
+              onDelete={() => setBikeToDelete(bike)}
+              onViewDetails={() => viewBikeDetails(bike.id)}
+            />
+          )}
+        />
+        {bikeToDelete && (
+          <DeleteModal
+            visible={true}
+            onConfirm={confirmDeleteBike}
+            onCancel={() => setBikeToDelete(null)}
           />
         )}
-      />
-      {bikeToDelete && (
-        <DeleteModal
-          visible={true}
-          onConfirm={confirmDeleteBike}
-          onCancel={() => setBikeToDelete(null)}
-        />
-      )}
+      </Flex>
     </Contianer>
   )
 }

@@ -11,7 +11,7 @@ const Contianer = ({ children }: ContianerPorps) => {
     <Row style={{ maxWidth: '1200ox', marginInline: 'auto' }}>
       <Col span={24}>
         <Col span={20} offset={2} style={{ marginTop: '50px' }}>
-          <Flex style={{ gap: '24px' }}>{children}</Flex>
+          {children}
         </Col>
       </Col>
     </Row>

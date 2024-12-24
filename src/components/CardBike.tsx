@@ -1,4 +1,5 @@
-import { Button, Card, Flex } from 'antd'
+import { Button, Card, Row, Col } from 'antd'
+import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { Bike } from '../models/Bike'
 
@@ -10,25 +11,38 @@ interface CardBikeProps {
 }
 
 const CardBike = ({ bike, onEdit, onDelete, onViewDetails }: CardBikeProps) => {
-  // Return a card with the bike information
   return (
     <Card title={bike.model} key={bike.id} style={{ width: '100%' }}>
-      <Flex justify="space-between" align="center">
-        <p>{bike.type}</p>
-        <p>{bike.color}</p>
-        <p>{bike.wheelSize}</p>
-        <p>{bike.price}</p>
-        <p>{bike.description}</p>
-        <Button onClick={onEdit}>Edit</Button>
-        <Button danger onClick={onDelete}>
-          Delete
-        </Button>
-        <Link to={`/bike/${bike.id}`}>
-          <Button type="primary" onClick={onViewDetails}>
-            View Details
+      <Row gutter={[12, 12]}>
+        <Col span={18}>
+          <p>Type: {bike.type}</p>
+          <p>Couleur: {bike.color}</p>
+          <p>Taille de la roue: {bike.wheelSize}</p>
+          <p>Prix: {bike.price} €</p>
+          <p>Description: {bike.description}</p>
+        </Col>
+        <Col
+          span={6}
+          style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+        >
+          <Button icon={<EditOutlined />} onClick={onEdit}>
+            Editer
           </Button>
-        </Link>
-      </Flex>
+          <Button icon={<DeleteOutlined />} danger onClick={onDelete}>
+            Supprimer
+          </Button>
+          <Link to={`/bike/${bike.id}`}>
+            <Button
+              icon={<EyeOutlined />}
+              type="primary"
+              onClick={onViewDetails}
+              style={{ width: '100%' }}
+            >
+              Voir les détails
+            </Button>
+          </Link>
+        </Col>
+      </Row>
     </Card>
   )
 }

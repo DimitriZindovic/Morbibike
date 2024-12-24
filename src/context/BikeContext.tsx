@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  PropsWithChildren,
-} from 'react'
+import React, { createContext, useContext, useState, ReactNode } from 'react'
 import { Bike } from '../models/Bike'
 
 interface BikeContextProps {
@@ -14,7 +8,7 @@ interface BikeContextProps {
 
 const BikeContext = createContext<BikeContextProps | undefined>(undefined)
 
-export const BikeProvider = ({ children }: PropsWithChildren) => {
+export const BikeProvider = ({ children }: { children: ReactNode }) => {
   const [bikes, setBikes] = useState<Bike[]>([])
   return (
     <BikeContext.Provider value={{ bikes, setBikes }}>
@@ -23,4 +17,10 @@ export const BikeProvider = ({ children }: PropsWithChildren) => {
   )
 }
 
-export const useBikeContext = () => useContext(BikeContext) as BikeContextProps
+export const useBikeContext = () => {
+  const context = useContext(BikeContext)
+  if (!context) {
+    throw new Error('useBikeContext must be used within a BikeProvider')
+  }
+  return context
+}

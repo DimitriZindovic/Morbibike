@@ -3,6 +3,7 @@ import { Button, Flex, Form, Input } from 'antd'
 import type { FormProps } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { Bike } from '../models/Bike'
+import { PlusOutlined } from '@ant-design/icons'
 
 interface InputButtonProps {
   onButtonClick: (
@@ -128,7 +129,13 @@ const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
           <TextArea placeholder="Enter the description of bike" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
+          <Button
+            icon={<PlusOutlined />}
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+            style={{ width: '100%' }}
+          >
             {initialValues ? 'Update' : 'Add'}
           </Button>
         </Form.Item>
