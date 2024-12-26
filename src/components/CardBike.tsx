@@ -11,6 +11,7 @@ interface CardBikeProps {
 }
 
 const CardBike = ({ bike, onEdit, onDelete, onViewDetails }: CardBikeProps) => {
+  // Return a card displaying the bike's details
   return (
     <Card title={bike.model} key={bike.id} style={{ width: '100%' }}>
       <Row gutter={[12, 12]}>

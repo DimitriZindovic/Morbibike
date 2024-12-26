@@ -7,6 +7,7 @@ interface DeleteModalProps {
 }
 
 const DeleteModal = ({ visible, onConfirm, onCancel }: DeleteModalProps) => {
+  // Return a modal to confirm deletion
   return (
     <Modal
       title="Confirmer la suppression"

@@ -8,6 +8,7 @@ interface BikeContextProps {
 
 const BikeContext = createContext<BikeContextProps | undefined>(undefined)
 
+// BikeProvider component
 export const BikeProvider = ({ children }: { children: ReactNode }) => {
   const [bikes, setBikes] = useState<Bike[]>([])
   return (
@@ -17,6 +18,7 @@ export const BikeProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
+// Custom hook to use the BikeContext
 export const useBikeContext = () => {
   const context = useContext(BikeContext)
   if (!context) {

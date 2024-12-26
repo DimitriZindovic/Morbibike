@@ -15,6 +15,7 @@ const Home = () => {
   const [bikeToDelete, setBikeToDelete] = useState<Bike | null>(null)
   const navigate = useNavigate()
 
+  // Function to add a bike to the list
   const addBikeOnList = (
     id: number | undefined,
     model: string,
@@ -51,6 +52,7 @@ const Home = () => {
     return true
   }
 
+  // Function to update a bike on the list
   const updateBikeOnList = (
     id: number,
     model: string,
@@ -78,6 +80,7 @@ const Home = () => {
     return true
   }
 
+  // Function to confirm the deletion of a bike
   const confirmDeleteBike = () => {
     if (bikeToDelete) {
       const updatedBikes = bikes.filter((bike) => bike.id !== bikeToDelete.id)
@@ -86,11 +89,13 @@ const Home = () => {
     }
   }
 
+  // Function to view the details of a bike
   const viewBikeDetails = (bikeId: number) => {
     navigate(`/bike/${bikeId}`)
   }
 
   return (
+    // Display a form to add or edit a bike, a list of bikes, and a modal to confirm the deletion of a bike
     <Contianer>
       <Flex style={{ gap: '24px' }}>
         <InputButon
