@@ -4,7 +4,7 @@ import { useBikeContext } from '../context/BikeContext'
 import Container from '../components/Container'
 import BikeDescription from '../components/BikeDescription'
 import RentList from '../components/RentList'
-import RentModal from '../components/RentModal'
+import RentDrawer from '../components/RentDrawer'
 import { Button } from 'antd'
 import { Rent } from '../models/Rent'
 
@@ -50,7 +50,7 @@ const BikeDetails = () => {
       </Button>
       <RentList title="Prochaines locations" rents={upcomingRents} />
       <RentList title="Locations passées" rents={pastRents} />
-      <RentModal
+      <RentDrawer
         visible={isModalVisible}
         onCreate={addRent}
         onCancel={() => setIsModalVisible(false)}

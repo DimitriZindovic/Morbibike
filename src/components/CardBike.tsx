@@ -15,7 +15,7 @@ const CardBike = ({ bike, onEdit, onDelete, onViewDetails }: CardBikeProps) => {
   return (
     <Card title={bike.model} key={bike.id} style={{ width: '100%' }}>
       <Row gutter={[12, 12]}>
-        <Col span={18}>
+        <Col span={20}>
           <p>Type: {bike.type}</p>
           <p>Couleur: {bike.color}</p>
           <p>Taille de la roue: {bike.wheelSize}</p>
@@ -23,7 +23,7 @@ const CardBike = ({ bike, onEdit, onDelete, onViewDetails }: CardBikeProps) => {
           <p>Description: {bike.description}</p>
         </Col>
         <Col
-          span={6}
+          span={4}
           style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
         >
           <Button icon={<EditOutlined />} onClick={onEdit}>

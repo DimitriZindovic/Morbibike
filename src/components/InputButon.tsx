@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Flex, Form, Input } from 'antd'
+import { Button, Drawer, Form, Input, notification } from 'antd'
 import type { FormProps } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { Bike } from '../models/Bike'
@@ -16,6 +16,8 @@ interface InputButtonProps {
     description: string
   ) => boolean
   initialValues?: Bike | null
+  drawerVisible: boolean
+  setDrawerVisible: (visible: boolean) => void
 }
 
 type FieldType = {
@@ -27,11 +29,17 @@ type FieldType = {
   description?: string
 }
 
-const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
+// Component to add or update a bike
+const InputButton = ({
+  onButtonClick,
+  initialValues,
+  drawerVisible,
+  setDrawerVisible,
+}: InputButtonProps) => {
   const [isLoading, setisLoading] = useState(false)
   const [form] = Form.useForm()
 
-  // This Function set the initial values of the form
+  // Set the initial values of the form
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues)
@@ -40,14 +48,16 @@ const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
     }
   }, [initialValues, form])
 
+  // Function to clean the fields of the form
   const cleanField = () => {
     form.resetFields()
   }
 
-  // This Function make the form submit and add a bike to the list of bikes
+  // Function to add or update a bike
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     setisLoading(true)
 
+    // Add or update a bike
     const result = onButtonClick(
       initialValues?.id ?? 0,
       String(values.model),
@@ -58,89 +68,112 @@ const InputButton = ({ onButtonClick, initialValues }: InputButtonProps) => {
       String(values.description)
     )
 
+    // Check if the bike has been added or updated
     if (result === true) {
       setisLoading(false)
       cleanField()
+      setDrawerVisible(false)
+      notification.success({
+        message: 'Succès',
+        description: initialValues
+          ? 'Le vélo a été mis à jour avec succès.'
+          : 'Le vélo a été ajouté avec succès.',
+      })
     }
   }
 
-  // Return a form to add a bike
   return (
-    <Flex vertical style={{ width: '30%' }}>
-      <Form
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        form={form}
-        layout="vertical"
+    // Return a button to open a drawer to add or update a bike
+    <>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => setDrawerVisible(true)}
+        style={{ marginBottom: '16px' }}
       >
-        <Form.Item
-          label="Modèle du vélo"
+        {initialValues ? 'Mettre à jour un vélo' : 'Ajouter un vélo'}
+      </Button>
+      <Drawer
+        title={initialValues ? 'Mettre à jour le vélo' : 'Ajouter un vélo'}
+        width={360}
+        onClose={() => setDrawerVisible(false)}
+        visible={drawerVisible}
+        bodyStyle={{ paddingBottom: 80 }}
+      >
+        <Form
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          form={form}
           layout="vertical"
-          name={'model'}
-          rules={[{ required: true, message: 'Ajoutez un modèle de vélo' }]}
         >
-          <Input placeholder="Enter the model of bike" type="text" />
-        </Form.Item>
-        <Form.Item
-          label="Type de vélo"
-          layout="vertical"
-          name={'type'}
-          rules={[{ required: true, message: 'Ajoutez un type de vélo' }]}
-        >
-          <Input placeholder="Enter the type of bike" type="text" />
-        </Form.Item>
-        <Form.Item
-          label="Couleur"
-          layout="vertical"
-          name={'color'}
-          rules={[{ required: true, message: 'Ajoutez une couleur au vélo' }]}
-        >
-          <Input placeholder="Enter the color of bike" type="text" />
-        </Form.Item>
-        <Form.Item
-          label="Taille de roue"
-          layout="vertical"
-          name={'wheelSize'}
-          rules={[
-            {
-              required: true,
-              message: 'Ajoutez une taille de roue à votre vélo',
-            },
-          ]}
-        >
-          <Input placeholder="Enter the wheel size of bike" type="number" />
-        </Form.Item>
-        <Form.Item
-          label="Prix"
-          layout="vertical"
-          name={'price'}
-          rules={[{ required: true, message: 'Ajoutez un prix à votre vélo' }]}
-        >
-          <Input placeholder="Enter the price of bike" type="number" />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          layout="vertical"
-          name={'description'}
-          rules={[
-            { required: true, message: 'Ajoutez une description à votre vélo' },
-          ]}
-        >
-          <TextArea placeholder="Enter the description of bike" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            icon={<PlusOutlined />}
-            type="primary"
-            htmlType="submit"
-            loading={isLoading}
-            style={{ width: '100%' }}
+          <Form.Item
+            label="Modèle du vélo"
+            name="model"
+            rules={[{ required: true, message: 'Ajoutez un modèle de vélo' }]}
           >
-            {initialValues ? 'Update' : 'Add'}
-          </Button>
-        </Form.Item>
-      </Form>
-    </Flex>
+            <Input placeholder="Enter the model of bike" type="text" />
+          </Form.Item>
+          <Form.Item
+            label="Type de vélo"
+            name="type"
+            rules={[{ required: true, message: 'Ajoutez un type de vélo' }]}
+          >
+            <Input placeholder="Enter the type of bike" type="text" />
+          </Form.Item>
+          <Form.Item
+            label="Couleur"
+            name="color"
+            rules={[{ required: true, message: 'Ajoutez une couleur au vélo' }]}
+          >
+            <Input placeholder="Enter the color of bike" type="text" />
+          </Form.Item>
+          <Form.Item
+            label="Taille de roue"
+            name="wheelSize"
+            rules={[
+              {
+                required: true,
+                message: 'Ajoutez une taille de roue à votre vélo',
+              },
+            ]}
+          >
+            <Input placeholder="Enter the wheel size of bike" type="number" />
+          </Form.Item>
+          <Form.Item
+            label="Prix"
+            name="price"
+            rules={[
+              { required: true, message: 'Ajoutez un prix à votre vélo' },
+            ]}
+          >
+            <Input placeholder="Enter the price of bike" type="number" />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: 'Ajoutez une description à votre vélo',
+              },
+            ]}
+          >
+            <TextArea placeholder="Enter the description of bike" />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              icon={<PlusOutlined />}
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+              style={{ width: '100%' }}
+            >
+              {initialValues ? 'Mettre à jour' : 'Ajouter'}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
+    </>
   )
 }
 

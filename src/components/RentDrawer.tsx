@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, Form, DatePicker, Button, Input } from 'antd'
+import { Drawer, Form, DatePicker, Button, notification } from 'antd'
 import { RangePickerProps } from 'antd/es/date-picker'
 import { Rent } from '../models/Rent'
 import { Bike } from '../models/Bike'
@@ -8,14 +8,14 @@ import isBetween from 'dayjs/plugin/isBetween'
 
 dayjs.extend(isBetween)
 
-interface RentModalProps {
+interface RentDrawerProps {
   visible: boolean
   onCreate: (rent: Rent) => void
   onCancel: () => void
   bike: Bike
 }
 
-const RentModal = ({ visible, onCreate, onCancel, bike }: RentModalProps) => {
+const RentDrawer = ({ visible, onCreate, onCancel, bike }: RentDrawerProps) => {
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -40,21 +40,24 @@ const RentModal = ({ visible, onCreate, onCancel, bike }: RentModalProps) => {
     onCreate(newRent)
     setIsLoading(false)
     form.resetFields()
+    notification.success({
+      message: 'Succès',
+      description: 'La location a été créée avec succès',
+    })
   }
 
-  // Return a modal to create a rent
+  // Return a drawer to create a rent
   return (
-    <Modal
+    <Drawer
       title="Créer une location"
       visible={visible}
-      onCancel={onCancel}
-      footer={null}
+      onClose={onCancel}
+      width={360}
     >
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="rentRange"
           label="Plage de dates"
-          layout="vertical"
           rules={[
             {
               required: true,
@@ -70,8 +73,8 @@ const RentModal = ({ visible, onCreate, onCancel, bike }: RentModalProps) => {
           </Button>
         </Form.Item>
       </Form>
-    </Modal>
+    </Drawer>
   )
 }
 
-export default RentModal
+export default RentDrawer

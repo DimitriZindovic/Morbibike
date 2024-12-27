@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Row, Col, Tabs } from 'antd'
 import InputButon from '../components/InputButon'
 import { Bike } from '../models/Bike'
 import BikeList from '../components/BikeList'
 import CardBike from '../components/CardBike'
 import DeleteModal from '../components/DeleteModal'
 import { useBikeContext } from '../context/BikeContext'
-import Contianer from '../components/Container'
-import { Flex } from 'antd'
+import Container from '../components/Container'
+import RentCalendar from '../components/RentCalendar'
+
+const { TabPane } = Tabs
 
 const Home = () => {
   const { bikes, setBikes } = useBikeContext()
   const [editingBike, setEditingBike] = useState<Bike | null>(null)
   const [bikeToDelete, setBikeToDelete] = useState<Bike | null>(null)
+  const [drawerVisible, setDrawerVisible] = useState(false)
   const navigate = useNavigate()
 
   // Function to add a bike to the list
@@ -33,10 +37,10 @@ const Home = () => {
       price == 0 ||
       description == ''
     ) {
-      alert('Tous les champs doivent être remplis')
       return false
     }
 
+    // Create a new bike
     const newBike: Bike = {
       id: bikes.length + 1,
       model,
@@ -89,40 +93,53 @@ const Home = () => {
     }
   }
 
-  // Function to view the details of a bike
   const viewBikeDetails = (bikeId: number) => {
     navigate(`/bike/${bikeId}`)
   }
 
+  // Display the list of bikes and a calendar of rents
   return (
-    // Display a form to add or edit a bike, a list of bikes, and a modal to confirm the deletion of a bike
-    <Contianer>
-      <Flex style={{ gap: '24px' }}>
-        <InputButon
-          onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
-          initialValues={editingBike}
+    <Container>
+      <Row gutter={[24, 24]}>
+        <Col span={24}>
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Liste des vélos" key="1" style={{ marginTop: 16 }}>
+              <InputButon
+                onButtonClick={editingBike ? updateBikeOnList : addBikeOnList}
+                initialValues={editingBike}
+                drawerVisible={drawerVisible}
+                setDrawerVisible={setDrawerVisible}
+              />
+              <BikeList
+                bikes={bikes}
+                renderItem={(bike) => (
+                  <CardBike
+                    bike={bike}
+                    key={bike.id}
+                    onEdit={() => {
+                      setEditingBike(bike)
+                      setDrawerVisible(true)
+                    }}
+                    onDelete={() => setBikeToDelete(bike)}
+                    onViewDetails={() => viewBikeDetails(bike.id)}
+                  />
+                )}
+              />
+            </TabPane>
+            <TabPane tab="Calendrier des locations" key="2">
+              <RentCalendar bikes={bikes} />
+            </TabPane>
+          </Tabs>
+        </Col>
+      </Row>
+      {bikeToDelete && (
+        <DeleteModal
+          visible={true}
+          onConfirm={confirmDeleteBike}
+          onCancel={() => setBikeToDelete(null)}
         />
-        <BikeList
-          bikes={bikes}
-          renderItem={(bike) => (
-            <CardBike
-              bike={bike}
-              key={bike.id}
-              onEdit={() => setEditingBike(bike)}
-              onDelete={() => setBikeToDelete(bike)}
-              onViewDetails={() => viewBikeDetails(bike.id)}
-            />
-          )}
-        />
-        {bikeToDelete && (
-          <DeleteModal
-            visible={true}
-            onConfirm={confirmDeleteBike}
-            onCancel={() => setBikeToDelete(null)}
-          />
-        )}
-      </Flex>
-    </Contianer>
+      )}
+    </Container>
   )
 }
 
