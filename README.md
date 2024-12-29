@@ -1,6 +1,6 @@
-# Morbibike - Votre Magasin de Vélos à Morbihan
+# Morbibike - Votre Magasin de Vélos du Morbihan
 
-Bienvenue dans le projet **Morbibike**, une application web pour gérer les vélos et leurs locations dans votre magasin de vélos à Morbihan.
+Bienvenue dans le projet **Morbibike**, une application web pour gérer les vélos et leurs locations dans votre magasin de vélos du Morbihan.
 
 ## Table des matières
 
