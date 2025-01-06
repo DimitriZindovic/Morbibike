@@ -1,8 +1,13 @@
 import { Outlet } from 'react-router-dom'
-import { BikeProvider } from './context/BikeContext'
+import { Provider } from 'react-redux'
+import store from './store/stores'
 
 const App = () => {
-  return <Outlet />
+  return (
+    <Provider store={store}>
+      <Outlet />
+    </Provider>
+  )
 }
 
 export default App

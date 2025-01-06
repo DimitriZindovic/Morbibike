@@ -5,6 +5,8 @@ import { Rent } from '../models/Rent'
 import { Bike } from '../models/Bike'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
+import { useAppDispatch } from '../hook'
+import { addRent } from '../store/rentReducer'
 
 dayjs.extend(isBetween)
 
@@ -18,6 +20,7 @@ interface RentDrawerProps {
 const RentDrawer = ({ visible, onCreate, onCancel, bike }: RentDrawerProps) => {
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useAppDispatch()
 
   const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     // Check if the current date is between the start and end date of a rent
@@ -37,6 +40,7 @@ const RentDrawer = ({ visible, onCreate, onCancel, bike }: RentDrawerProps) => {
       rentStart: values.rentRange[0].toDate(),
       rentEnd: values.rentRange[1].toDate(),
     }
+    dispatch(addRent(newRent))
     onCreate(newRent)
     setIsLoading(false)
     form.resetFields()

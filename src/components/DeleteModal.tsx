@@ -11,7 +11,7 @@ const DeleteModal = ({ visible, onConfirm, onCancel }: DeleteModalProps) => {
   return (
     <Modal
       title="Confirmer la suppression"
-      visible={visible}
+      open={visible}
       onOk={onConfirm}
       onCancel={onCancel}
     >

@@ -97,8 +97,8 @@ const InputButton = ({
         title={initialValues ? 'Mettre à jour le vélo' : 'Ajouter un vélo'}
         width={360}
         onClose={() => setDrawerVisible(false)}
-        visible={drawerVisible}
-        bodyStyle={{ paddingBottom: 80 }}
+        open={drawerVisible}
+        style={{ paddingBottom: 80 }}
       >
         <Form
           initialValues={{ remember: true }}

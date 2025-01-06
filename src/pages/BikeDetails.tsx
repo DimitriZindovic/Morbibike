@@ -1,17 +1,21 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useBikeContext } from '../context/BikeContext'
 import Container from '../components/Container'
 import BikeDescription from '../components/BikeDescription'
 import RentList from '../components/RentList'
 import RentDrawer from '../components/RentDrawer'
 import { Button } from 'antd'
 import { Rent } from '../models/Rent'
+import { useAppSelector, useAppDispatch } from '../hook'
+import { addRent } from '../store/rentReducer'
+import { updateBike } from '../store/bikeReducer'
 
 const BikeDetails = () => {
   const { id } = useParams<{ id: string }>()
-  const { bikes, setBikes } = useBikeContext()
-  const bike = bikes.find((bike) => bike.id === Number(id))
+  const bike = useAppSelector((state) =>
+    state.bike.bike.find((bike) => bike.id === Number(id))
+  )
+  const dispatch = useAppDispatch()
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   if (!bike) {
@@ -19,24 +23,22 @@ const BikeDetails = () => {
   }
 
   // Function to add a rent to a bike
-  const addRent = (newRent: Rent) => {
-    const updatedBikes = bikes.map((currentBike) => {
-      if (currentBike.id === bike.id) {
-        return { ...currentBike, rents: [...currentBike.rents, newRent] }
-      } else {
-        return currentBike
-      }
-    })
-    setBikes(updatedBikes)
+  const addRentToBike = (newRent: Rent) => {
+    const updatedBike = {
+      ...bike,
+      rents: [...bike.rents, newRent],
+    }
+    dispatch(updateBike(updatedBike))
+    dispatch(addRent(newRent))
     setIsModalVisible(false)
   }
 
-  // Filter loctions that are upcoming (after the current date)
+  // Filter locations that are upcoming (after the current date)
   const upcomingRents = bike.rents.filter(
     (rent) => new Date(rent.rentStart) > new Date()
   )
 
-  // Filter loctions that are past (before the current date
+  // Filter locations that are past (before the current date)
   const pastRents = bike.rents.filter(
     (rent) => new Date(rent.rentStart) <= new Date()
   )
@@ -52,7 +54,7 @@ const BikeDetails = () => {
       <RentList title="Locations passées" rents={pastRents} />
       <RentDrawer
         visible={isModalVisible}
-        onCreate={addRent}
+        onCreate={addRentToBike}
         onCancel={() => setIsModalVisible(false)}
         bike={bike}
       />

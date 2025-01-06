@@ -1,22 +1,23 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Row, Col, Tabs } from 'antd'
+import { Row, Col, Tabs, Button } from 'antd'
 import InputButon from '../components/InputButon'
 import { Bike } from '../models/Bike'
 import BikeList from '../components/BikeList'
 import CardBike from '../components/CardBike'
 import DeleteModal from '../components/DeleteModal'
-import { useBikeContext } from '../context/BikeContext'
 import Container from '../components/Container'
 import RentCalendar from '../components/RentCalendar'
-
+import { useAppSelector, useAppDispatch } from '../hook'
+import { addBike, updateBike, deleteBike } from '../store/bikeReducer'
 const { TabPane } = Tabs
 
 const Home = () => {
-  const { bikes, setBikes } = useBikeContext()
   const [editingBike, setEditingBike] = useState<Bike | null>(null)
   const [bikeToDelete, setBikeToDelete] = useState<Bike | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
+  const bikes = useAppSelector((state) => state.bike.bike)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   // Function to add a bike to the list
@@ -30,12 +31,12 @@ const Home = () => {
     description: string
   ): boolean => {
     if (
-      model == '' ||
-      type == '' ||
-      color == '' ||
-      wheelSize == 0 ||
-      price == 0 ||
-      description == ''
+      model === '' ||
+      type === '' ||
+      color === '' ||
+      wheelSize === 0 ||
+      price === 0 ||
+      description === ''
     ) {
       return false
     }
@@ -52,7 +53,7 @@ const Home = () => {
       rents: [],
     }
 
-    setBikes([...bikes, newBike])
+    dispatch(addBike(newBike))
     return true
   }
 
@@ -66,20 +67,18 @@ const Home = () => {
     price: number,
     description: string
   ): boolean => {
-    const updatedBikes = bikes.map((bike) =>
-      bike.id === id
-        ? {
-            ...bike,
-            model,
-            type,
-            color,
-            wheelSize,
-            price,
-            description,
-          }
-        : bike
-    )
-    setBikes(updatedBikes)
+    const updatedBike: Bike = {
+      id,
+      model,
+      type,
+      color,
+      wheelSize,
+      price,
+      description,
+      rents: [],
+    }
+
+    dispatch(updateBike(updatedBike))
     setEditingBike(null)
     return true
   }
@@ -87,8 +86,7 @@ const Home = () => {
   // Function to confirm the deletion of a bike
   const confirmDeleteBike = () => {
     if (bikeToDelete) {
-      const updatedBikes = bikes.filter((bike) => bike.id !== bikeToDelete.id)
-      setBikes(updatedBikes)
+      dispatch(deleteBike(bikeToDelete.id))
       setBikeToDelete(null)
     }
   }
@@ -127,7 +125,7 @@ const Home = () => {
               />
             </TabPane>
             <TabPane tab="Calendrier des locations" key="2">
-              <RentCalendar bikes={bikes} />
+              <RentCalendar />
             </TabPane>
           </Tabs>
         </Col>

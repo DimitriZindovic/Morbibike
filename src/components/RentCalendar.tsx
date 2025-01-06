@@ -1,14 +1,11 @@
 import { Calendar, Badge, List } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { Bike } from '../models/Bike'
+import { useAppSelector } from '../hook'
 import dayjs from 'dayjs'
 
-interface RentCalendarProps {
-  bikes: Bike[]
-}
-
-const RentCalendar = ({ bikes }: RentCalendarProps) => {
+const RentCalendar = () => {
   const navigate = useNavigate()
+  const bikes = useAppSelector((state) => state.bike.bike)
 
   const getListData = (date: dayjs.Dayjs) => {
     const listData: { type: string; content: string; bikeId: number }[] = []
@@ -18,7 +15,7 @@ const RentCalendar = ({ bikes }: RentCalendarProps) => {
         const rentStart = dayjs(rent.rentStart)
         const rentEnd = dayjs(rent.rentEnd)
 
-        // Check if the current date is the start date of
+        // Check if the current date is the start date of a rent
         if (rentStart.isSame(date, 'day')) {
           listData.push({
             type: 'success',
@@ -56,7 +53,7 @@ const RentCalendar = ({ bikes }: RentCalendarProps) => {
     )
   }
 
-  return <Calendar dateCellRender={dateCellRender} />
+  return <Calendar cellRender={dateCellRender} />
 }
 
 export default RentCalendar
